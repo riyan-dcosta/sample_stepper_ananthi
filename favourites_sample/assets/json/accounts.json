@@ -1,0 +1,42 @@
+{
+  "accounts": [
+    {
+      "name": "Account 1",
+      "account_number": "1234567890",
+      "account_type": "Savings",
+      "currency_code": "USD"
+    },
+    {
+      "name": "Account 2",
+      "account_number": "0987654321",
+      "account_type": "Checking",
+      "currency_code": "EUR"
+    },
+    {
+      "name": "Account 2",
+      "account_number": "0987654451",
+      "account_type": "Current",
+      "currency_code": "EUR"
+    }
+  ],
+  "favorites": [
+    {
+      "name": "Favorite 1",
+      "account_number": "9876543210",
+      "account_type": "Investment",
+      "currency_code": "GBP"
+    },
+    {
+      "name": "Favorite 2",
+      "account_number": "5432109876",
+      "account_type": "Credit Card",
+      "currency_code": "JPY"
+    },
+    {
+      "name": "Favorite 3",
+      "account_number": "5432109876",
+      "account_type": "Credit Card",
+      "currency_code": "JPY"
+    }
+  ]
+}
