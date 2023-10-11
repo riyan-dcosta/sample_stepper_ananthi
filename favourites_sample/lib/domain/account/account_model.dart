@@ -1,17 +1,27 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+class UserDataModel {
+  final String? first_name;
+  final String? last_name;
+  final String? email;
+  final int? id;
+  final String? avatar;
+  double? payAmount;
 
-part 'account_model.freezed.dart';
-part 'account_model.g.dart';
+  UserDataModel({
+    this.first_name,
+    this.last_name,
+    this.email,
+    this.id,
+    this.avatar,
+    this.payAmount,
+  });
+}
 
-@freezed
-class Account with _$Account {
-  const factory Account({
-    required String name,
-    required String accountNumber,
-    required String accountType,
-    required String currencyCode,
-  }) = _Account;
+class TotalAmountItem {
+   double? totalAmount;
+  final UserDataModel? user;
 
-  factory Account.fromJson(Map<String, dynamic> json) =>
-      _$AccountFromJson(json);
+  TotalAmountItem({
+    this.totalAmount,
+    this.user,
+  });
 }

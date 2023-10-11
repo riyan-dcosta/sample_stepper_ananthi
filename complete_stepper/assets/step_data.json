@@ -45,29 +45,5 @@
     "name": "Jane Smithg dfgnnsfgns",
     "status": "submitted",
     "userType": "Manager"
-  },
-  {
-    "dateTime": "2023-10-12T12:00:00",
-    "name": "Alice Johnson dfnsdngnms",
-    "status": "active",
-    "userType": "Employee"
-  },
-  {
-    "dateTime": "2023-10-13T13:00:00",
-    "name": "Bob Brown",
-    "status": "inactive",
-    "userType": "Admin"
-  },
-  {
-    "dateTime": "2023-10-14T14:00:00",
-    "name": "Eve Davis jgjkfsjgjkfskgjghfgdh ",
-    "status": "submitted",
-    "userType": "Manager"
-  },
-  {
-    "dateTime": "2023-10-15T15:00:00",
-    "name": "Charlie Wilson jfgkfdgjk",
-    "status": "active",
-    "userType": "Employee"
   }
 ]

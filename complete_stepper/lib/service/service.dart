@@ -3,7 +3,7 @@ import 'package:riverpod/riverpod.dart';
 
 class StepDataService {
   Future<String> loadStepDataJson() async {
-    final jsonString = await rootBundle.loadString('assets/step_data.json');
+    final jsonString = await rootBundle.loadString('assets/sample.json');
     return jsonString;
   }
 }

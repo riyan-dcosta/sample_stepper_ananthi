@@ -26,10 +26,23 @@ class WidgetValueLoader<T> extends ConsumerWidget {
         if (errorBuilder != null) {
           return errorBuilder!(error, stackTrace);
         } else {
+          // Handle the error here.
+          // For example, you could show a dialog to the user with the error message.
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Error'),
+                content: Text(error.toString()),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text('OK'),
+                  ),
+                ],
+              ));
           return Text('Error: $error');
         }
       },
     );
   }
 }
-
