@@ -1,0 +1,38 @@
+[
+  {
+    "userType": "Customer",
+    "name": "Jane Johnson",
+    "dateTime": "2023-10-20T11:45:00",
+    "status": "shipped",
+    "stepperColor": "#0066FF",
+    "stepperLine": "#CCCCCC",
+    "statusText": "Shipped",
+    "someIntValue": 42,
+    "someDateTimeValue": "2023-10-23T09:30:00",
+    "someBoolValue": true
+  },
+  {
+    "userType": "Admin",
+    "name": "Bob Brown",
+    "dateTime": "2023-10-21T16:30:00",
+    "status": "delivered",
+    "stepperColor": "#00CC00",
+    "stepperLine": "#C0C0C0",
+    "statusText": "Delivered",
+    "someIntValue": 27,
+    "someDateTimeValue": "2023-10-24T14:15:00",
+    "someBoolValue": false
+  },
+  {
+    "userType": "Customer",
+    "name": "Ella Davis",
+    "dateTime": "2023-10-22T14:15:00",
+    "status": "returned",
+    "stepperColor": "#FF3333",
+    "stepperLine": "#FF0000",
+    "statusText": "Returned",
+    "someIntValue": 68,
+    "someDateTimeValue": "2023-10-25T19:00:00",
+    "someBoolValue": true
+  }
+]
