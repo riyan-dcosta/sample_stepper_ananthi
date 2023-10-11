@@ -73,4 +73,14 @@ class EnumUtils {
         return 'Unknown'; // Handle the case for unknown status
     }
   }
+
+  StepperEnum getStatusEnum(String? status){
+    switch (status) {
+      case 'Authorized':
+        return StepperEnum.authorized;
+
+      default:
+        return StepperEnum.returned;
+    }
+  }
 }

@@ -15,6 +15,10 @@ abstract class StepperDataHolder<T> {
   final String? userType;
   final StepperEnum status;
 
+  DateTime get d => dateFormat;
+
+  // final StepperEnum status;
+
   StepperDataHolder({
     required this.dateFormat,
     required this.timeFormat,
@@ -25,8 +29,7 @@ abstract class StepperDataHolder<T> {
   });
 }
 
-
-class GenericStepper<T extends StepperDataHolder<SampleModel>> extends StatelessWidget {
+class GenericStepper<T extends StepperDataHolder> extends StatefulWidget {
   final List<T> steps;
 
   @override
@@ -46,71 +49,123 @@ class GenericStepper<T extends StepperDataHolder<SampleModel>> extends Stateless
 
   @override
   final StepperEnum status;
-  const GenericStepper({Key? key, required this.steps, required this.dateFormat, required this.timeFormat, required this.scrollDirection, this.name, this.userType, required this.status}) : super(key: key);
 
+  const GenericStepper(
+      {Key? key,
+      required this.steps,
+      required this.dateFormat,
+      required this.timeFormat,
+      required this.scrollDirection,
+      this.name,
+      this.userType,
+      required this.status})
+      : super(key: key);
+
+  @override
+  State<GenericStepper<T >> createState() =>
+      _GenericStepperState<T >();
+}
+
+class _GenericStepperState<T extends StepperDataHolder> extends
+State<GenericStepper<T >> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
       child: ListView.builder(
-        itemCount: steps.length,
+        itemCount: widget.steps.length,
+        scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
-          final step = steps[index];
-          return buildStep(step);
+          final step = widget.steps[index];
+          return buildStep(index, step);
         },
       ),
     );
   }
 
-  Widget buildStep(T stepHolder) {
-    return Container(
-      width: 150,
-      margin: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            stepHolder.dateFormat.toString(),
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+  Widget buildStep(int index, T step) {
+    // final step = widget.steps[index];
+    return Column(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              step.dateFormat.toString(),
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+              ),
             ),
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            stepHolder.timeFormat.toString(),
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: stepHolder.status.stepperColor,
-                  shape: BoxShape.circle,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 8.0),
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: step.status == StepperEnum.returned
+                        ? Colors.red
+                        : Colors.green,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    step.status == StepperEnum.returned
+                        ? Icons.close
+                        : Icons.check,
+                    color: Colors.white,
+                    size: 30,
+                  ),
                 ),
-                child: Icon(
-                  stepHolder.status.icon,
-                  color: stepHolder.status.iconColor,
-                  size: 30,
+                step.status == StepperEnum.returned
+                    ? CustomPaint(
+                  size: const Size(150, 2), // Adjust the size as needed
+                  painter:
+                  StepperLinesPainter(stepCount: widget.steps.length),
+                )
+                    : Container(
+                  height: 2,
+                  width: 150,
+                  color: Colors.grey,
+                ),
+                const SizedBox(height: 8.0),
+              ],
+            ),
+            SizedBox(
+              width: 150,
+              child: Text(
+                "${step.userType}",
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Container(
-                width: 150,
-                height: 1,
-                color: stepHolder.status.stepperLine,
+            ),
+            const SizedBox(height: 4.0),
+            Text(
+              '(${step.userType})',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black,
               ),
-            ],
-          ),
-          // Customize the rest of your UI elements here based on your data
-        ],
-      ),
+            ),
+            const SizedBox(height: 4.0),
+            Text(
+              step.status == StepperEnum.returned
+                  ? 'Returned'
+                  : step.status == StepperEnum.initiated
+                  ? 'Success'
+                  : 'Failure',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -121,7 +176,7 @@ class Sample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final asyncValueProvider = Provider<AsyncValue<List<SampleModel>>>(
-          (ref) => ref.watch(stepDataProvider),
+      (ref) => ref.watch(stepDataProvider),
     );
 
     return ProviderScope(
@@ -129,13 +184,47 @@ class Sample extends StatelessWidget {
         value: asyncValueProvider,
         data: (data) {
           return GenericStepper<SampleModel>(
-            steps: data, dateFormat: , timeFormat: null, scrollDirection: null, status: null,
+            steps: data,
+            dateFormat: DateTime.now(),
+            timeFormat: DateTime.now(),
+            scrollDirection: Axis.horizontal,
+            status: StepperEnum.authorized,
           );
         },
         loadingBuilder: () => const CircularProgressIndicator(),
         errorBuilder: (error, stackTrace) => Text('Error: $error'),
       ),
     );
+  }
+}
+
+class StepperLinesPainter extends CustomPainter {
+  final int stepCount;
+
+  StepperLinesPainter({required this.stepCount});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final linePaint = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 2;
+
+    final spaceBetweenCircles = size.width / (stepCount - 1);
+    final circleRadius = size.height / 2;
+
+    for (var i = 0; i < stepCount - 1; i++) {
+      final x1 = (i + 0.5) * spaceBetweenCircles;
+      final y1 = circleRadius;
+      final x2 = (i + 1) * spaceBetweenCircles;
+      final y2 = circleRadius;
+
+      canvas.drawLine(Offset(x1, y1), Offset(x2, y2), linePaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
 
