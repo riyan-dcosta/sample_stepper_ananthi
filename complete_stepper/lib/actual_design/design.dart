@@ -105,8 +105,8 @@ class _HorizontalStepperState extends State<HorizontalStepper> {
                   height: 35,
                   decoration: BoxDecoration(
                     color: step.status == StepperEnum.returned
-                        ? Colors.red
-                        : Colors.green,
+                        ? Colors.green
+                        : Colors.red,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -228,7 +228,7 @@ class MyApp extends StatelessWidget {
 // void main() {
 //   runApp(MyApp());
 // }
-
+//
 //
 // class StepperLinesPainter extends CustomPainter {
 //   final int stepCount;
