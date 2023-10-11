@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:convert' show json;
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'enum/enum.dart';
+import '../enum/enum.dart';
 
-
-class StepperData {
+abstract class StepperData {
   final DateTime dateTime;
   final String userName;
   final StepperEnum status;
@@ -19,6 +18,18 @@ class StepperData {
   });
 }
 
+class StepperData2 extends StepperData {
+  final String name;
+
+  StepperData2({
+    required this.name,
+    required super.dateTime,
+    required super.userName,
+    required super.status,
+    required super.userType,
+  });
+}
+
 class StepDataService {
   Future<List<StepperData>> loadStepData() async {
     final jsonString = await rootBundle.loadString('assets/step_data.json');
@@ -26,7 +37,8 @@ class StepDataService {
     final List<StepperData> steps = [];
 
     for (var data in jsonData) {
-      steps.add(StepperData(
+      steps.add(StepperData2(
+        name: "name",
         dateTime: DateTime.parse(data['dateTime']),
         userName: data['name'],
         status: getStatusColorFromString(data['status']),
@@ -51,8 +63,8 @@ class StepDataService {
   }
 }
 
-class HorizontalStepper extends StatefulWidget {
-  final List<StepperData> steps;
+class HorizontalStepper<T extends StepperData> extends StatefulWidget {
+  final List<T> steps;
 
   HorizontalStepper({required this.steps}) : super(key: UniqueKey());
 
@@ -119,15 +131,15 @@ class _HorizontalStepperState extends State<HorizontalStepper> {
                 ),
                 step.status == StepperEnum.returned
                     ? CustomPaint(
-                  size: const Size(150, 2), // Adjust the size as needed
-                  painter:
-                  StepperLinesPainter(stepCount: widget.steps.length),
-                )
+                        size: const Size(150, 2), // Adjust the size as needed
+                        painter:
+                            StepperLinesPainter(stepCount: widget.steps.length),
+                      )
                     : Container(
-                  height: 2,
-                  width: 150,
-                  color: Colors.grey,
-                ),
+                        height: 2,
+                        width: 150,
+                        color: Colors.grey,
+                      ),
                 const SizedBox(height: 8.0),
               ],
             ),
@@ -154,8 +166,8 @@ class _HorizontalStepperState extends State<HorizontalStepper> {
               step.status == StepperEnum.returned
                   ? 'Returned'
                   : step.status == StepperEnum.initiated
-                  ? 'Success'
-                  : 'Failure',
+                      ? 'Success'
+                      : 'Failure',
               style: const TextStyle(
                 fontSize: 14,
                 color: Colors.black,
