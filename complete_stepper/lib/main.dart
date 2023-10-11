@@ -26,7 +26,7 @@ abstract class StepperDataHolder<T> {
 }
 
 
-class GenericStepper<T extends StepperDataHolder<SampleModel>> extends StatelessWidget {
+class GenericStepper<T extends StepperDataHolder<T>> extends StatelessWidget {
   final List<T> steps;
 
   @override
@@ -143,7 +143,7 @@ void main() {
   runApp(const MaterialApp(
     home: Scaffold(
       body: Center(
-        child: Sample(),
+        child: StepperStructure(),
       ),
     ),
   ));
